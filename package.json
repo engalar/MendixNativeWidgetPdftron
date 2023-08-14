@@ -10,7 +10,7 @@
   },
   "license": "Apache-2.0",
   "config": {
-    "projectPath": "./tests/testProject"
+    "projectPath": "C:/Users/DELL/Mendix/MmgPoc-main"
   },
   "packagePath": "engalar",
   "scripts": {
@@ -30,10 +30,11 @@
     "@mendix/pluggable-widgets-tools": "^10.0.0",
     "@types/big.js": "^6.0.2",
     "@types/enzyme": "^3.10.8",
-    "@types/jest": "^29.0.0"
+    "@types/jest": "^29.0.0",
+    "deprecated-react-native-prop-types": "^4.2.1"
   },
   "dependencies": {
-
+    "@pdftron/react-native-pdf": "^3.0.3-25"
   },
   "resolutions": {
     "react": "18.2.0",

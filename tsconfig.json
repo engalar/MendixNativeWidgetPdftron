@@ -1,7 +1,18 @@
 {
   "extends": "@mendix/pluggable-widgets-tools/configs/tsconfig.base",
   "compilerOptions": {
-    "baseUrl": "./"
+    "baseUrl": "./",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    // "skipLibCheck": true,
+    "jsx": "react",
+    "jsxFactory": "React.createElement"
   },
-  "include": ["./src", "./typings"]
+  "include": [
+    "./src",
+    "./typings"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

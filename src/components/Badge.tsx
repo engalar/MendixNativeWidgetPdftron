@@ -1,9 +1,11 @@
-import { ReactElement, createElement, ElementType, useMemo } from "react";
-import { Platform, Text, TouchableNativeFeedback, TouchableOpacity, View } from "react-native";
+import React, { ReactElement, useEffect } from "react";
+import { Platform, StyleSheet, View, BackHandler, Alert } from "react-native";
+import { DocumentView, RNPdftron } from "@pdftron/react-native-pdf";
 
-import { mergeNativeStyles } from "@mendix/pluggable-widgets-tools";
+// import { mergeNativeStyles } from "@mendix/pluggable-widgets-tools";
 
-import { BadgeStyle, defaultBadgeStyle } from "../ui/styles";
+import { BadgeStyle } from "../ui/styles";
+
 
 export interface BadgeProps {
     value: string;
@@ -12,25 +14,47 @@ export interface BadgeProps {
 }
 
 export function Badge({ value, style, onClick }: BadgeProps): ReactElement {
-    const styles = mergeNativeStyles(defaultBadgeStyle, style);
+    useEffect(() => {
+        console.log(value, style, onClick);
 
-    const Touchable: ElementType = Platform.OS === "android" ? TouchableNativeFeedback : TouchableOpacity;
+        RNPdftron.initialize("Insert commercial license key here after purchase");
+        RNPdftron.enableJavaScript(true);
+    }, []);
 
-    const renderContent = useMemo(() => {
-        const text = <Text style={styles.label}>{value}</Text>;
-
-        if (Platform.OS === "android") {
-            return <View style={styles.badge}>{text}</View>;
+    const onLeadingNavButtonPressed = (): void => {
+        console.log("leading nav button pressed");
+        if (Platform.OS === "ios") {
+            Alert.alert(
+                "App",
+                "onLeadingNavButtonPressed",
+                [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+                { cancelable: true }
+            );
+        } else {
+            BackHandler.exitApp();
         }
+    };
 
-        return text;
-    }, [styles, value]);
+    // const styles = mergeNativeStyles(defaultBadgeStyle, style);
+    const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "#F5FCFF"
+        }
+    });
+
+    const path = "https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_mobile_about.pdf";
 
     return (
         <View style={styles.container}>
-            <Touchable style={styles.badge} onPress={onClick} useForeground>
-                {renderContent}
-            </Touchable>
+            <DocumentView
+                document={path}
+                showLeadingNavButton
+                leadingNavButtonIcon={Platform.OS === "ios" ? "ic_close_black_24px.png" : "ic_arrow_back_white_24dp"}
+                onLeadingNavButtonPressed={onLeadingNavButtonPressed}
+            />
         </View>
     );
 }
