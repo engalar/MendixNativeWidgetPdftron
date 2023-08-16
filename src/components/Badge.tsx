@@ -1,11 +1,11 @@
-import React, { ReactElement, useEffect } from "react";
-import { Platform, StyleSheet, View, BackHandler, Alert } from "react-native";
+import React, { ReactElement, useEffect, createElement, useState, useCallback } from "react";
+import { Platform, StyleSheet, View, BackHandler, Alert, TextInput, Button } from "react-native";
 import { DocumentView, RNPdftron } from "@pdftron/react-native-pdf";
+import DocumentPicker from "react-native-document-picker";
 
 // import { mergeNativeStyles } from "@mendix/pluggable-widgets-tools";
 
 import { BadgeStyle } from "../ui/styles";
-
 
 export interface BadgeProps {
     value: string;
@@ -14,6 +14,7 @@ export interface BadgeProps {
 }
 
 export function Badge({ value, style, onClick }: BadgeProps): ReactElement {
+    const [path, setPath] = useState<string>("http://192.168.2.22:8080/PDFTRON_mobile_about.pdf");
     useEffect(() => {
         console.log(value, style, onClick);
 
@@ -21,7 +22,7 @@ export function Badge({ value, style, onClick }: BadgeProps): ReactElement {
         RNPdftron.enableJavaScript(true);
     }, []);
 
-    const onLeadingNavButtonPressed = (): void => {
+    const onLeadingNavButtonPressed = useCallback((): void => {
         console.log("leading nav button pressed");
         if (Platform.OS === "ios") {
             Alert.alert(
@@ -33,7 +34,22 @@ export function Badge({ value, style, onClick }: BadgeProps): ReactElement {
         } else {
             BackHandler.exitApp();
         }
-    };
+    }, []);
+
+    const handleDocumentPick = useCallback(async (): Promise<void> => {
+        try {
+            const result = await DocumentPicker.pick({
+                type: [DocumentPicker.types.pdf]
+            });
+            if (result.length > 0) {
+                setPath(result[0].uri);
+            }
+        } catch (err) {
+            if (!DocumentPicker.isCancel(err)) {
+                // 处理其他错误
+            }
+        }
+    }, []);
 
     // const styles = mergeNativeStyles(defaultBadgeStyle, style);
     const styles = StyleSheet.create({
@@ -42,13 +58,21 @@ export function Badge({ value, style, onClick }: BadgeProps): ReactElement {
             justifyContent: "center",
             alignItems: "center",
             backgroundColor: "#F5FCFF"
+        },
+        input: {
+            height: 40
         }
     });
 
-    const path = "https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_mobile_about.pdf";
-
     return (
         <View style={styles.container}>
+            <Button title="选择文档" onPress={handleDocumentPick} />
+            <TextInput
+                style={styles.input}
+                placeholder="输入PDF地址"
+                onChangeText={newPath => setPath(newPath)}
+                value={path}
+            />
             <DocumentView
                 document={path}
                 showLeadingNavButton

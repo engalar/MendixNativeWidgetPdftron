@@ -34,7 +34,8 @@
     "deprecated-react-native-prop-types": "^4.2.1"
   },
   "dependencies": {
-    "@pdftron/react-native-pdf": "^3.0.3-25"
+    "@pdftron/react-native-pdf": "^3.0.3-25",
+    "react-native-document-picker": "^9.0.1"
   },
   "resolutions": {
     "react": "18.2.0",
