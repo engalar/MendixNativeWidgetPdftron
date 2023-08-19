@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect, createElement, useState, useCallback } from "react";
 import { Platform, StyleSheet, View, BackHandler, Alert, TextInput, Button } from "react-native";
-import { DocumentView, RNPdftron } from "@pdftron/react-native-pdf";
+import { DocumentView, RNPdftron } from "react-native-pdftron";
 import DocumentPicker from "react-native-document-picker";
 
 // import { mergeNativeStyles } from "@mendix/pluggable-widgets-tools";
