@@ -11,6 +11,7 @@ export interface NativePdftronProps<Style> {
     name: string;
     style: Style[];
     value?: EditableValue<string | Big>;
+    onSaveClick?: ActionValue;
     onClick?: ActionValue;
 }
 
@@ -24,5 +25,6 @@ export interface NativePdftronPreviewProps {
     styleObject?: CSSProperties;
     readOnly: boolean;
     value: string;
+    onSaveClick: {} | null;
     onClick: {} | null;
 }
