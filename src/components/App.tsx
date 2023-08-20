@@ -1,9 +1,10 @@
-import React, { useState, useEffect, createElement } from "react";
-import { Platform, StyleSheet, Text, View, PermissionsAndroid, BackHandler, NativeModules, Alert } from "react-native";
+import React, { useState, useEffect, createElement, useRef, MutableRefObject } from "react";
+import { Platform, StyleSheet, Text, View, PermissionsAndroid, Alert } from "react-native";
 
-import { DocumentView, RNPdftron } from "react-native-pdftron";
+import { DocumentView, RNPdftron } from "@pdftron/react-native-pdf";
 
-const App = ({ path }: { path: string }) => {
+const App = ({ path, onClick }: { path: string; onClick: () => void }) => {
+    const documentViewRef: MutableRefObject<DocumentView | null> = useRef(null);
     const [permissionGranted, setPermissionGranted] = useState(Platform.OS === "ios");
 
     useEffect(() => {
@@ -40,7 +41,7 @@ const App = ({ path }: { path: string }) => {
                 { cancelable: true }
             );
         } else {
-            BackHandler.exitApp();
+            onClick();
         }
     };
 
@@ -52,11 +53,11 @@ const App = ({ path }: { path: string }) => {
         );
     }
 
-    // const path = "https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_mobile_about.pdf";
-
     return (
         <DocumentView
+            ref={documentViewRef}
             document={path}
+            isBase64String
             showLeadingNavButton
             leadingNavButtonIcon={Platform.OS === "ios" ? "ic_close_black_24px.png" : "ic_arrow_back_white_24dp"}
             onLeadingNavButtonPressed={onLeadingNavButtonPressed}
